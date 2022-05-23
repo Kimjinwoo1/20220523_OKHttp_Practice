@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.databinding.DataBindingUtil
 import com.nepplus.a20220523_okhttp_practice.databinding.ActivityMainBinding
+import com.nepplus.a20220523_okhttp_practice.utils.ServerUtil
 
 class MainActivity : AppCompatActivity() {
 
@@ -21,6 +22,9 @@ class MainActivity : AppCompatActivity() {
         val inputEmail = binding.emailEdt.text.toString()
         val inputPw = binding.passwordEdt.text.toString()
 
+        ServerUtil.postRequestLogin(inputEmail, inputPw)
+
+        ServerUtil.BASE_URL
 
 
     }
