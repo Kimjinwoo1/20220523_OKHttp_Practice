@@ -8,7 +8,7 @@ import com.nepplus.a20220523_okhttp_practice.databinding.ActivityMainBinding
 import com.nepplus.a20220523_okhttp_practice.utils.ServerUtil
 import org.json.JSONObject
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : BaseActivity() {
 
     lateinit var binding : ActivityMainBinding
 
@@ -19,7 +19,7 @@ class MainActivity : AppCompatActivity() {
         setValues()
     }
 
-    fun setupEvents(){
+    override fun setupEvents(){
     binding.loginBtn.setOnClickListener {
         val inputEmail = binding.emailEdt.text.toString()
         val inputPw = binding.passwordEdt.text.toString()
@@ -53,7 +53,9 @@ class MainActivity : AppCompatActivity() {
     }
     }
 
-    fun setValues(){
+
+
+    override fun setValues(){
 
     }
 }
