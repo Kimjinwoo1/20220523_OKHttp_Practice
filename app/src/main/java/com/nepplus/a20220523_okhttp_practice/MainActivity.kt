@@ -20,6 +20,9 @@ class MainActivity : AppCompatActivity() {
     binding.loginBtn.setOnClickListener {
         val inputEmail = binding.emailEdt.text.toString()
         val inputPw = binding.passwordEdt.text.toString()
+
+
+
     }
     }
 
