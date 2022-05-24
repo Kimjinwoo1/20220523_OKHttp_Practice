@@ -24,6 +24,15 @@ class SignUpActivity : BaseActivity() {
         binding.signUpBtn.setOnClickListener {
 //            회원가입을 함수가 실행
 
+            binding.dupEmailBtn.setOnClickListener {
+                val inputEmail = binding.emailEdt.text.toString()
+                checkDuplicate("EMAIL",inputEmail)
+            }
+            binding.dupNickBtn.setOnClickListener {
+                val inputNick = binding.nicknameEdt.text.toString()
+                checkDuplicate("NICK_NAME",inputNick)
+            }
+
             val inputEmail = binding.emailEdt.text.toString()
             val inputPw = binding.passwordEdt.text.toString()
             val inputNickname = binding.nicknameEdt.text.toString()
@@ -58,5 +67,13 @@ class SignUpActivity : BaseActivity() {
 
     override fun setValues() {
 
+    }
+    fun checkDuplicate(type : String,value : String){
+//        타입에 따른 중복 검사를 진행
+        ServerUtil.getRequestUserCheck(type,value,object : ServerUtil.Companion.JsonResponseHandler{
+            override fun onResponse(jsonObj: JSONObject) {
+
+            }
+        })
     }
 }

@@ -2,6 +2,7 @@ package com.nepplus.a20220523_okhttp_practice.utils
 
 import android.util.Log
 import okhttp3.*
+import okhttp3.HttpUrl.Companion.toHttpUrlOrNull
 import org.json.JSONObject
 import java.io.IOException
 
@@ -30,7 +31,7 @@ class ServerUtil {
         fun postRequestLogin(email: String, pw: String, handler: JsonResponseHandler?) {
 
 //            Request 제작 -> 실제 호출 -> 서버의 응답을 화면에 전달
-//            제작1) 어느 주소 (url)로 접근 할지 ? => 서버주소 + 기능 주소
+//            제작1) 어느 주소 (접url)로 근 할지 ? => 서버주소 + 기능 주소
             val urlString = "${BASE_URL}/user"
 
 //            제작 2) 파라미터 담아두기 => 어떤 이름표 / 어느 공간에
@@ -39,7 +40,7 @@ class ServerUtil {
                 .add("password", pw)
                 .build()
 
-//           제작 3) 모든 Request 정보를 종합한 객체 생성 ( 어떤주소로 + 어떤 메쏘드로 + 어떤 파라미터로 )
+//           제작 3)  모든 Request정보를 종합한 객체 생성 ( 어떤주소로 + 어떤 메쏘드로 + 어떤 파라미터로 )
             val request = Request.Builder()
                 .url(urlString)
                 .post(formData)
@@ -128,6 +129,41 @@ class ServerUtil {
             })
 
         }
+//        중복 검사 기능 호출함수
+        fun getRequestUserCheck( type : String , value : String, handler : JsonResponseHandler? ){
 
+//    밑에 안될경우 val urlBuilder = HttpUrI.parse("${BASE.URL}/user_Check"
+        val urlBuilder = "${BASE_URL}/user_check".toHttpUrlOrNull()!!.newBuilder()
+            .addEncodedQueryParameter("type",type)
+            .addEncodedQueryParameter("value",value)
+            .build()
+
+        val urlString = urlBuilder.toString()
+
+//        Log.d("완성된 url",urlString)
+
+        val request = Request.Builder()
+            .url(urlString)
+            .get()
+            .build()
+
+        val client = OkHttpClient()
+
+        client.newCall(request).enqueue(object  : Callback{
+            override fun onFailure(call: Call, e: IOException) {
+
+            }
+
+            override fun onResponse(call: Call, response: Response) {
+                val bodyString = response.body!!.string()
+                val jsonObj = JSONObject(bodyString)
+                Log.d("서버응답", jsonObj.toString())
+
+                handler?.onResponse(jsonObj)
+
+            }
+        })
+
+        }
     }
 }
