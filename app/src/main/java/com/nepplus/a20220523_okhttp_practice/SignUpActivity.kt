@@ -3,7 +3,9 @@ package com.nepplus.a20220523_okhttp_practice
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.widget.TextView
 import android.widget.Toast
+import androidx.core.widget.addTextChangedListener
 import androidx.databinding.DataBindingUtil
 import com.nepplus.a20220523_okhttp_practice.databinding.ActivitySignUpBinding
 import com.nepplus.a20220523_okhttp_practice.utils.ServerUtil
@@ -21,16 +23,30 @@ class SignUpActivity : BaseActivity() {
         setValues()
     }
     override fun setupEvents() {
+        binding.emailEdt.addTextChangedListener {
+            binding.dupEmailTxt.text = "중복 검사를 해주세요."
+        }
+        binding.nicknameEdt.addTextChangedListener {
+            binding.dupNickTxt.text = "중복 검사를 해주세요."
+        }
+
+
         binding.signUpBtn.setOnClickListener {
+
+//            [도전 과제] 이메일 / 닉네임 중복검사 통과X => 회원가입 처리 진행 X
+//            hint : return을 활용해서 클릭이벤트를 취소하자.
+
 //            회원가입을 함수가 실행
 
             binding.dupEmailBtn.setOnClickListener {
                 val inputEmail = binding.emailEdt.text.toString()
-                checkDuplicate("EMAIL",inputEmail)
+                val textView = binding.dupEmailTxt
+                checkDuplicate("EMAIL",inputEmail,textView)
             }
             binding.dupNickBtn.setOnClickListener {
                 val inputNick = binding.nicknameEdt.text.toString()
-                checkDuplicate("NICK_NAME",inputNick)
+                val textView = binding.dupNickTxt
+                checkDuplicate("NICK_NAME",inputNick, textView )
             }
 
             val inputEmail = binding.emailEdt.text.toString()
@@ -68,11 +84,22 @@ class SignUpActivity : BaseActivity() {
     override fun setValues() {
 
     }
-    fun checkDuplicate(type : String,value : String){
+    fun checkDuplicate(type : String,value : String, textView : TextView){
 //        타입에 따른 중복 검사를 진행
         ServerUtil.getRequestUserCheck(type,value,object : ServerUtil.Companion.JsonResponseHandler{
             override fun onResponse(jsonObj: JSONObject) {
+                val code = jsonObj.getInt("code")
+                val message = jsonObj.getString("message")
 
+                runOnUiThread {
+                    when(code){
+//                    중복이 아닐경우
+                        200 -> { textView.text = message }
+//                    중복될 경우
+                        400 -> { textView.text = message }
+                        else -> {}
+                    }
+                }
             }
         })
     }
