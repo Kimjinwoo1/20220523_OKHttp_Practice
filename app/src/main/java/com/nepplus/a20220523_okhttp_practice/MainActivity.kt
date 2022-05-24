@@ -1,9 +1,11 @@
 package com.nepplus.a20220523_okhttp_practice
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import com.nepplus.a20220523_okhttp_practice.databinding.ActivityMainBinding
+import com.nepplus.a20220523_okhttp_practice.utils.ContextUtil
 
 class MainActivity : BaseActivity() {
 
@@ -16,6 +18,13 @@ class MainActivity : BaseActivity() {
         setValues()
     }
     override fun setupEvents() {
+        binding.logoutBtn.setOnClickListener {
+            ContextUtil.clear(mContext)
+
+            val myIntent = Intent(mContext, LoginActivity::class.java)
+            startActivity(myIntent)
+            finish()
+        }
 
     }
 

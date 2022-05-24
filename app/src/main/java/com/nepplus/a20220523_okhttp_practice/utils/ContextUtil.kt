@@ -6,10 +6,10 @@ class ContextUtil {
 
     companion object{
 
-        val prefName = "okHttpPracticePref"
+        private val prefName = "okHttpPracticePref"
 
-        val AUTO_LOGIN = "AUTO_LOGIN"
-        val LOGIN_TOKEN = "LOGIN_TOKEN"
+        private val AUTO_LOGIN = "AUTO_LOGIN"
+        private val LOGIN_TOKEN = "LOGIN_TOKEN"
 
         fun setLoginToken(context : Context, token : String){
             val pref = context.getSharedPreferences(prefName,Context.MODE_PRIVATE)
@@ -29,6 +29,11 @@ class ContextUtil {
             val pref = context.getSharedPreferences(prefName,Context.MODE_PRIVATE)
             return pref.getBoolean(AUTO_LOGIN, false)
 
+        }
+
+        fun clear( context : Context ){
+            val pref = context.getSharedPreferences(prefName,Context.MODE_PRIVATE)
+            pref.edit().clear().apply()
         }
 
     }

@@ -1,5 +1,6 @@
 package com.nepplus.a20220523_okhttp_practice.utils
 
+import android.content.Context
 import android.util.Log
 import okhttp3.*
 import okhttp3.HttpUrl.Companion.toHttpUrlOrNull
@@ -132,6 +133,8 @@ class ServerUtil {
 //        중복 검사 기능 호출함수
         fun getRequestUserCheck( type : String , value : String, handler : JsonResponseHandler? ){
 
+
+
 //    밑에 안될경우 val urlBuilder = HttpUrI.parse("${BASE.URL}/user_Check"
         val urlBuilder = "${BASE_URL}/user_check".toHttpUrlOrNull()!!.newBuilder()
             .addEncodedQueryParameter("type",type)
@@ -163,6 +166,41 @@ class ServerUtil {
 
             }
         })
+
+        }
+
+        //    사용자 정보 조회 (Token값의 유효성 검사)
+        fun getRequestUserInfo(context : Context,handler : JsonResponseHandler?){
+            val token = ContextUtil.getLoginToken(context)
+
+            val urlBuilder = "${BASE_URL}/user_info".toHttpUrlOrNull()!!.newBuilder()
+                .build()
+
+
+            val urlString = urlBuilder.toString()
+
+            val request = Request.Builder()
+                .url(urlString)
+                .get()
+                .header("X-Http-Token",token)
+                .build()
+
+            val client = OkHttpClient()
+
+            client.newCall(request).enqueue(object : Callback{
+                override fun onFailure(call: Call, e: IOException) {
+
+                }
+
+                override fun onResponse(call: Call, response: Response) {
+                    val jsonObj = JSONObject(response.body!!.string())
+                    Log.d("서버응답", jsonObj.toString())
+
+                    handler?.onResponse(jsonObj)
+
+
+                }
+            })
 
         }
     }
