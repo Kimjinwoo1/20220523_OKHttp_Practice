@@ -53,17 +53,18 @@ class LoginActivity : BaseActivity() {
 
                     runOnUiThread {
                         Toast.makeText(mContext, "${nickname}님 환영합니다", Toast.LENGTH_SHORT).show()
+                        val myIntent = Intent(mContext, MainActivity::class.java)
+                        startActivity(myIntent)
+                        finish()
                     }
 
                 }
                 else{
                     val message = jsonObj.getString("message")
                     runOnUiThread {
-                        Toast.makeText(this@LoginActivity,message,Toast.LENGTH_SHORT).show()
+                        Toast.makeText(mContext,message,Toast.LENGTH_SHORT).show()
 
-                        val myIntent = Intent(mContext, MainActivity::class.java)
-                        startActivity(myIntent)
-                        finish()
+
                     }
                 }
             }
